@@ -1,9 +1,9 @@
-@using System.Web.Optimization
+﻿@using System.Web.Optimization
 @using EPiServer.Framework.Web.Mvc.Html
-@using AlloyReact.Business
+@using EPiServer.Editor
 @model IPageViewModel<SitePageData>
 <!DOCTYPE html>
-<html lang="@Model.CurrentPage.LanguageBranch">
+<html lang="@Model.CurrentPage.LanguageBranch" data-edit-mode="@PageEditing.PageIsInEditMode">
     <head>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=10" />

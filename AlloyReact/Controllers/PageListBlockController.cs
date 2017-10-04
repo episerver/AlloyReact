@@ -3,11 +3,13 @@ using System.Linq;
 using System.Web.Mvc;
 using EPiServer.Core;
 using EPiServer.Filters;
-using AlloyReact.Business;
-using AlloyReact.Models.Blocks;
-using AlloyReact.Models.ViewModels;
 using EPiServer.Web.Mvc;
 using EPiServer;
+using EPiServer.Web.Routing;
+using AlloyReact.Helpers;
+using AlloyReact.Models.Pages;
+using AlloyReact.Business;
+using AlloyReact.Models.Blocks;
 
 namespace AlloyReact.Controllers
 {
@@ -15,6 +17,7 @@ namespace AlloyReact.Controllers
     {
         private ContentLocator contentLocator;
         private IContentLoader contentLoader;
+
         public PageListBlockController(ContentLocator contentLocator, IContentLoader contentLoader)
         {
             this.contentLocator = contentLocator;
@@ -23,27 +26,10 @@ namespace AlloyReact.Controllers
 
         public override ActionResult Index(PageListBlock currentBlock)
         {
-            var pages = FindPages(currentBlock);
-
-            pages = Sort(pages, currentBlock.SortOrder);
-            
-            if(currentBlock.Count > 0)
-            {
-                pages = pages.Take(currentBlock.Count);
-            }
-
-            var model = new PageListModel(currentBlock)
-                {
-                    Pages = pages
-                };
-
-            ViewData.GetEditHints<PageListModel, PageListBlock>()
-                .AddConnection(x => x.Heading, x => x.Heading);
-
-            return PartialView(model);
+            return PartialView("/Views/Shared/DisplayTemplates/PageListBlock.cshtml", currentBlock);
         }
 
-        private IEnumerable<PageData> FindPages(PageListBlock currentBlock)
+        public IEnumerable<PageData> FindPages(PageListBlock currentBlock)
         {
             IEnumerable<PageData> pages;
             var listRoot = currentBlock.Root;
@@ -75,15 +61,47 @@ namespace AlloyReact.Controllers
             {
                 pages = pages.Where(x => x.Category.Intersect(currentBlock.CategoryFilter).Any());
             }
+
+            var asCollection = new PageDataCollection(pages);
+            var sortFilter = new FilterSort(currentBlock.SortOrder);
+            sortFilter.Sort(asCollection);
+            pages = asCollection;
+
+            if (currentBlock.Count > 0)
+            {
+                pages = pages.Take(currentBlock.Count);
+            }
+
             return pages;
         }
 
-        private IEnumerable<PageData> Sort(IEnumerable<PageData> pages, FilterSortOrder sortOrder)
+        /// <summary>
+        /// Endpoint returning pages for a specific list block
+        /// </summary>
+        /// <param name="contentLink"></param>
+        /// <param name="propertyName"></param>
+        /// <returns></returns>
+        public JsonResult Pages(ContentReference contentLink, string propertyName)
         {
-            var asCollection = new PageDataCollection(pages);
-            var sortFilter = new FilterSort(sortOrder);
-            sortFilter.Sort(asCollection);
-            return asCollection;
+            // HACK Currently property name is forced to camel-case in serialization, convert back to Pascal case
+            propertyName = $"{propertyName.Substring(0, 1).ToUpper()}{propertyName.Substring(1)}";
+
+            var content = contentLoader.Get<IContent>(contentLink);
+
+            var pageListBlock = content as PageListBlock ?? (PageListBlock)content.Property[propertyName].Value;
+
+            var pages = FindPages(pageListBlock);
+
+            return Json(pages.OfType<SitePageData>().Select(p =>
+                new
+                {
+                    name = p.Name,
+                    description = p.TeaserText,
+                    date = p.StartPublish?.ToShortDateString(),
+                    url = UrlResolver.Current.GetUrl(p),
+                    cssClass = p.GetThemeCssClassNames()
+                }),
+                JsonRequestBehavior.AllowGet);
         }
     }
 }

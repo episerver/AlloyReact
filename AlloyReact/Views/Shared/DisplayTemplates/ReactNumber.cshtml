@@ -1,0 +1,16 @@
+﻿@model int
+    
+@Html.ReactComponentFor(
+    ViewData.ModelMetadata.PropertyName, /* Name of the property rendered */
+    "ReactNumber", /* The React component to mount */
+    new { someNumber = Model } /* Object to pass as props to the React component */)
+
+@*
+    The ReactComponentFor helper basically renders the markup below,
+    but also requires a script resource (our Webpack bundle) defined in module.config:
+
+    <div data-epi-property-name="SomeNumber"
+         data-epi-property-render="none" 
+         data-react-component="ReactNumber" 
+         data-props='{"someNumber":123}'></div>
+*@

@@ -12,11 +12,56 @@ using AlloyReact.Business;
 using EPiServer.Web.Mvc.Html;
 using EPiServer.Web.Routing;
 using EPiServer;
+using EPiServer.Editor;
+using EPiServer.Framework.Web.Resources;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 
 namespace AlloyReact.Helpers
 {
     public static class HtmlHelpers
     {
+        /// <summary>
+        /// Renders an HTML container in which a React component will be mounted
+        /// </summary>
+        /// <param name="html">Associated HTML helper</param>
+        /// <param name="component">Class or function name of React component</param>
+        /// <param name="props">Optional object to pass as props to the component</param>
+        /// <remarks>This HTML helper also ensure required script resources are loaded</remarks>
+        /// <returns></returns>
+        public static IHtmlString ReactComponent(this HtmlHelper html, string component, object props = null)
+        {
+            var propsJson = JsonConvert.SerializeObject(props, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
+
+            // Ensure scripts for React components is included on the page
+            ClientResources.RequireScript("", "ReactComponent", new[] { "react" });
+
+            // Render container element for the React component (for more attributes, see http://world.episerver.com/documentation/developer-guides/CMS/editing/)
+            return new MvcHtmlString($"<div data-react-component=\"{component}\" data-props='{propsJson ?? "{ }"}'></div>");
+        }
+
+        /// <summary>
+        /// Renders an HTML container in which a React component will be mounted associated with a content property
+        /// </summary>
+        /// <param name="html">Associated HTML helper</param>
+        /// <param name="component">Class or function name of React component</param>
+        /// <param name="props">Optional object to pass as props to the component</param>
+        /// <param name="propertyName">Name of the associated content property</param>
+        /// <remarks>This HTML helper also ensure required script resources are loaded</remarks>
+        /// <returns></returns>
+        public static IHtmlString ReactComponentFor(this HtmlHelper html, string propertyName, string component, object props = null)
+        {
+            var propsJson = JsonConvert.SerializeObject(props, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() });
+
+            // Ensure scripts for React components is included on the page
+            ClientResources.RequireScript("", "ReactComponent", new[] { "react" });
+
+            // Render container element for the React component (for more attributes, see http://world.episerver.com/documentation/developer-guides/CMS/editing/)
+            return PageEditing.PageIsInEditMode ?
+                    new MvcHtmlString($"<div data-epi-property-name=\"{propertyName}\" data-epi-property-render=\"none\" data-react-component=\"{component}\" data-props='{propsJson ?? "{ }"}'></div>") :
+                    html.ReactComponent(component, props);
+        }
+
         /// <summary>
         /// Returns an element for each child page of the rootLink using the itemTemplate.
         /// </summary>

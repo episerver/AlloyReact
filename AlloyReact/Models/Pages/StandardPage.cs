@@ -22,5 +22,8 @@ namespace AlloyReact.Models.Pages
             GroupName = SystemTabNames.Content,
             Order = 320)]
         public virtual ContentArea MainContentArea { get; set; }
+
+        [UIHint("ReactNumber")]
+        public virtual int SomeNumber { get; set; }
     }
 }
