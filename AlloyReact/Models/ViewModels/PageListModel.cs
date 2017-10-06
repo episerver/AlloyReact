@@ -36,7 +36,7 @@ namespace AlloyReact.Models.ViewModels
         public IEnumerable<dynamic> Pages
         {
             get { return _pages.Select(p => new { name = p.Name, description = (p as SitePageData)?.TeaserText, date = p.StartPublish?.ToShortDateString(), cssClass = p.GetThemeCssClassNames(), url = UrlResolver.Current.GetUrl(p) }); }
-            set => _pages = ((IEnumerable<PageData>)value).ToList();
+            set { _pages = ((IEnumerable<PageData>) value).ToList(); }
         }
 
         public bool IncludeIntroduction { get; set; }
