@@ -42,38 +42,4 @@ export default class ReactBlock extends React.Component {
             }.bind(this));
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    componentDidUpdate(props, state) {
-
-        var isMagicNumber = state.number === 451;
-
-        this.setState({
-            bonus: isMagicNumber ? <div style={{paddingTop:20}}>You wanted <strong>0451</strong>, right? I know you did.</div> : null
-        });
-
-        if (isMagicNumber) {
-            window.open("http://deusex.wikia.com/wiki/0451", "0451", "height=420,width=880");
-        }
-    }
 }
