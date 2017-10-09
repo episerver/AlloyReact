@@ -14,10 +14,9 @@ export default class ReactBlock extends React.Component {
 
     render() {
         return (
-            <div data-epi-property-name={this.props.propertyName} data-epi-property-render="none">
+            <div>
                 This React component was rendered at <strong>{this.state.firstRender.toLocaleTimeString("sv-SE")}</strong> with a number of <strong>{this.props.someNumber}</strong>.<br/><br/>
                 The current value of the <strong>{this.props.propertyName}</strong> property is <strong>{this.state.number}</strong>, and the current time is: <strong><Clock /></strong>
-                {this.state.bonus}
             </div>
         );
     }
