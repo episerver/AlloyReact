@@ -2,8 +2,6 @@
 
 export default class Clock extends React.Component {
     
-    timerHandle: null;
-
     constructor(props) {
         super(props);
 
@@ -35,7 +33,7 @@ export default class Clock extends React.Component {
     }
 
     render() {
-        return <span>{this.state.time}</span>
+        return <span>{this.state.time}</span>;
     }
 
 }
