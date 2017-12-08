@@ -2,7 +2,7 @@
 
 Example site for showing how to use On-Page Edit together with React. Please help out by contributing more examples through PR's!
 
-_Note: You'll need CMS UI >=10.12.0 and while this is in Beta you [need to enable the features](https://world.episerver.com/blogs/Fredrik-Tjarnberg/Dates/2014/9/Releasing-Beta-Features/)._
+_Note: You'll need CMS UI >=11.2.0 and while this is in Beta you [need to enable the features](https://world.episerver.com/documentation/Items/Installation-Instructions/beta-features/)._
 
 ## Site login
 User: cmsadmin
@@ -39,10 +39,19 @@ Have a look at its display template:
 You can see it in action by on-page editing this page:
 http://localhost:27399/en/alloy-plan/download-alloy-plan/
 
+### Editing a content that has a dynamic DOM
+The block type `ThreeKeyFactsBlock` is rendered as a React component and the user can select what properties to be shown. This requires that the On Page Edit mode (OPE) can update the property overlays so that the editor is editing the correct properties. This is enabled by publishing the `beta/domUpdated` event in `componentDidUpdate`.
+
+Have a look at the component:
+`/Static/react/ThreeKeyFacts.jsx`
+
+To see it in action you need to create a block of type `ThreeKeyFactsBlock`.
+
 ## Noteworthy files
 * `/Static/react/index.js`
 * `/Static/react/ReactNumber.jsx`
 * `/Static/react/PageListBlock.jsx`
+* `/Static/react/ThreeKeyFacts.jsx`
 * `/Views/Shared/DisplayTemplates/ReactNumber.cshtml`
 * `/Views/Shared/DisplayTemplates/PageListBlock.cshtml`
 
