@@ -42,7 +42,7 @@ namespace AlloyReact.Models.Pages
             GroupName = Global.GroupNames.MetaData,
             Order = 300)]
         [CultureSpecific]
-        [UIHint(UIHint.LongString)]
+        [UIHint(UIHint.Textarea)]
         public virtual string MetaDescription { get; set; }
 
         [Display(
