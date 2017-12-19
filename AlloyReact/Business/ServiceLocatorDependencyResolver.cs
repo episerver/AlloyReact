@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-using StructureMap;
 using EPiServer.ServiceLocation;
 
 namespace AlloyReact.Business
@@ -22,7 +21,7 @@ namespace AlloyReact.Business
             {
                 return GetInterfaceService(serviceType);
             }
-            return GetConcreteService(serviceType); 
+            return GetConcreteService(serviceType);
         }
 
         private object GetConcreteService(Type serviceType)
@@ -32,7 +31,7 @@ namespace AlloyReact.Business
                 // Can't use TryGetInstance here because it won’t create concrete types
                 return _serviceLocator.GetInstance(serviceType);
             }
-            catch (StructureMapException)
+            catch (ActivationException)
             {
                 return null;
             }

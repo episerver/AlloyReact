@@ -1,0 +1,15 @@
+@using AlloyTemplates.Models.Blocks
+@model ThreeKeyFactsBlock
+
+@Html.ReactComponent(
+    "ThreeKeyFacts", /* The React component to mount */
+    new /* Object to pass as props to the React component */
+    {
+        facts = new[]
+        {
+            new { propertyName = "FirstFact", fact = Model.FirstFact },
+            new { propertyName = "SecondFact", fact = Model.SecondFact },
+            new { propertyName = "ThirdFact", fact = Model.ThirdFact }
+        },
+        bonusContent = Model.BonusContent
+    })

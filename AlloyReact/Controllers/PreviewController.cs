@@ -11,6 +11,7 @@ using AlloyReact.Models.ViewModels;
 using EPiServer.Web;
 using EPiServer.Web.Mvc;
 using EPiServer;
+using EPiServer.Framework.Web.Mvc;
 
 namespace AlloyReact.Controllers
 {
@@ -24,6 +25,7 @@ namespace AlloyReact.Controllers
         Tags = new[] { RenderingTags.Preview, RenderingTags.Edit },
         AvailableWithoutTag = false)]
     [VisitorGroupImpersonation]
+    [RequireClientResources]
     public class PreviewController : ActionControllerBase, IRenderTemplate<BlockData>, IModifyLayout
     {
         private readonly IContentLoader _contentLoader;

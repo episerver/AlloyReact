@@ -2,11 +2,13 @@
 import ReactDOM from "react-dom";
 import ReactNumber from "./ReactNumber";
 import PageListBlock from "./PageListBlock";
+import ThreeKeyFacts from "./ThreeKeyFacts";
 
 // Dictionary of available component types to be able to get a class from its literal name
 const ComponentTypes = {
     "PageListBlock": PageListBlock,
-    "ReactNumber": ReactNumber
+    "ReactNumber": ReactNumber,
+    "ThreeKeyFacts": ThreeKeyFacts
 }
 
 document.addEventListener("DOMContentLoaded", function (event) {
