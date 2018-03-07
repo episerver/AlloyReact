@@ -28,6 +28,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
             ), componentContainer);
     }
 
+    var reactComponents = document.querySelectorAll("[data-react-component]");
+
+    // If the user is using IE 11 or lower we need to convert the nodeList to a regular array
+    reactComponents = Array.prototype.slice.call(reactComponents);
+
     // Mount React components
-    document.querySelectorAll("[data-react-component]").forEach(initialize);
+    reactComponents.forEach(initialize);
 });
