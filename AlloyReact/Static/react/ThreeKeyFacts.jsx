@@ -88,12 +88,4 @@ export default class ThreeKeyFacts extends React.Component {
             }
         }.bind(this));
     }
-
-    componentDidUpdate() {
-        if (window.epi && window.epi.publish) {
-            // Publishing the "beta/domUpdated" event will tell episerver UI that the dom has changed 
-            // and that it needs to remap its overlays.
-            window.epi.publish("beta/domUpdated");
-        }
-    }
 }
